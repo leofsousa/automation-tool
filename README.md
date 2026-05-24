@@ -17,7 +17,7 @@ A primeira funcionalidade implementada e um renomeador de arquivos em massa com 
 
 ## Regra Inicial De Renomeacao
 
-Exemplo:
+Exemplo 1:
 
 ```text
 BATERIA 11 [17-05] DOM M T N CR.mp4
@@ -29,11 +29,25 @@ Resultado:
 BAT 11.mp4
 ```
 
+Exemplo 2:
+
+```text
+LOTE 07A - DOM SEG OK.mp4
+```
+
+Resultado:
+
+```text
+LOTE 07A.mp4
+```
+
 Regras aplicadas:
 
 - `BATERIA` vira `BAT`.
 - Conteudos entre colchetes sao removidos.
-- Textos extras apos o numero principal sao removidos.
+- O primeiro codigo principal apos o prefixo e preservado.
+- O codigo principal pode ser numerico, como `11`, ou alfanumerico, como `07A`.
+- Textos extras apos o codigo principal sao removidos.
 - A extensao original do arquivo e preservada.
 - Arquivos com conflitos de nome nao sao renomeados automaticamente.
 
@@ -192,13 +206,13 @@ Sem ativar o ambiente virtual:
 Com o ambiente virtual ativado:
 
 ```powershell
-python -m PyInstaller --noconfirm --onefile --windowed --name AutomationTool main.py
+python -m PyInstaller --noconfirm --onefile --windowed --name AutomationTool --icon assets\app_icon.ico --add-data "assets\app_icon.ico;assets" main.py
 ```
 
 Sem ativar o ambiente virtual:
 
 ```powershell
-.\.venv\Scripts\python.exe -m PyInstaller --noconfirm --onefile --windowed --name AutomationTool main.py
+.\.venv\Scripts\python.exe -m PyInstaller --noconfirm --onefile --windowed --name AutomationTool --icon assets\app_icon.ico --add-data "assets\app_icon.ico;assets" main.py
 ```
 
 O executavel sera gerado em:
@@ -208,6 +222,8 @@ dist\AutomationTool.exe
 ```
 
 Esse `.exe` pode ser executado em outro computador Windows sem instalar Python, desde que o executavel tenha sido gerado corretamente com PyInstaller.
+
+O parametro `--icon assets\app_icon.ico` define o icone do executavel no Windows. O parametro `--add-data "assets\app_icon.ico;assets"` inclui o mesmo icone dentro do pacote para que a janela do aplicativo tambem consiga usa-lo em tempo de execucao.
 
 ## Arquivos Que Nao Devem Ir Para O GitHub
 

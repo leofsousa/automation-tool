@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from pathlib import Path
+import re
 
 from utils.file_helpers import get_files_from_folder, safe_target_path
 from utils.text_helpers import normalize_spaces
@@ -72,12 +73,12 @@ class RenameService:
             return file_name
 
         prefix = self._normalize_prefix(words[0])
-        main_number = self._find_first_number(words[1:])
+        main_code = self._find_first_main_code(words[1:])
 
-        if main_number is None:
+        if main_code is None:
             return f"{prefix}{extension}"
 
-        return f"{prefix} {main_number}{extension}"
+        return f"{prefix} {main_code}{extension}"
 
     def rename_files(self, preview_items: list[RenamePreviewItem]) -> RenameResult:
         success_count = 0
@@ -124,9 +125,9 @@ class RenameService:
             return "BAT"
         return value.upper()
 
-    def _find_first_number(self, values: list[str]) -> str | None:
+    def _find_first_main_code(self, values: list[str]) -> str | None:
         for value in values:
-            digits = "".join(char for char in value if char.isdigit())
-            if digits:
-                return digits
+            match = re.search(r"\d+[A-Za-z]*", value)
+            if match:
+                return match.group(0).upper()
         return None

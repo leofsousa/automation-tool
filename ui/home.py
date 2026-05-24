@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
+from pathlib import Path
 
 from ui.excel_page import ExcelPage
 from ui.rename_page import RenamePage
@@ -15,8 +16,20 @@ class App(tk.Tk):
         self.geometry("980x640")
         self.minsize(880, 560)
 
+        self._configure_window_icon()
         self._configure_style()
         self._build_layout()
+
+    def _configure_window_icon(self) -> None:
+        icon_path = Path(__file__).resolve().parents[1] / "assets" / "app_icon.ico"
+
+        if not icon_path.exists():
+            return
+
+        try:
+            self.iconbitmap(default=str(icon_path))
+        except tk.TclError:
+            pass
 
     def _configure_style(self) -> None:
         style = ttk.Style(self)
